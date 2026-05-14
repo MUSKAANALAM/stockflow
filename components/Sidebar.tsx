@@ -3,9 +3,9 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 
 const navItems = [
-  { href: '/dashboard', label: 'Dashboard', icon: 'ti-layout-dashboard' },
-  { href: '/products', label: 'Products', icon: 'ti-box' },
-  { href: '/settings', label: 'Settings', icon: 'ti-settings' },
+  { href: '/dashboard', label: 'Dashboard' },
+  { href: '/products', label: 'Products' },
+  { href: '/settings', label: 'Settings'},
 ]
 
 export default function Sidebar() {
