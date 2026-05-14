@@ -35,7 +35,7 @@ export default function Sidebar() {
                   : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800'
               }`}
             >
-              <i className={`ti ${item.icon} text-base`} />
+              <i className={`ti ${item} text-base`} />
               {item.label}
             </Link>
           )
