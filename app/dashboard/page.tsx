@@ -1,4 +1,5 @@
 import { getSession } from '@/lib/auth'
+import { getOrgSettings } from '@/lib/defaultStock'
 import { prisma } from '@/lib/prisma'
 import { Product } from '@prisma/client'
 import Link from 'next/link'
@@ -11,16 +12,22 @@ async function getData(orgId: string): Promise<{
   const products: Product[] = await prisma.product.findMany({
     where: { organizationId: orgId },
   })
+  
+const { defaultLowStockThreshold } = await getOrgSettings(orgId);
 
   const totalQuantity: number = products.reduce(
     (sum: number, p: Product) => sum + p.quantityOnHand,
     0
   )
 
-  const lowStock: Product[] = products.filter(
-    (p: Product) => p.quantityOnHand <= (p.lowStockThreshold ?? 5)
-  )
+ const lowStock: Product[] = products.filter((p: Product) => {
+  const threshold =
+    p.lowStockThreshold ??
+    defaultLowStockThreshold ??
+    5;
 
+  return p.quantityOnHand <= threshold;
+});
   return {
     totalProducts: products.length,
     totalQuantity,
@@ -31,6 +38,7 @@ async function getData(orgId: string): Promise<{
 export default async function DashboardPage() {
   const session = await getSession()
   const { totalProducts, totalQuantity, lowStock } = await getData(session!.orgId)
+  const { defaultLowStockThreshold } = await getOrgSettings(session!.orgId);
 
   return (
     <div>
@@ -90,7 +98,7 @@ export default async function DashboardPage() {
                     </span>
                   </td>
                   <td className="px-5 py-3 text-gray-500">
-                    {p.lowStockThreshold ?? 5}
+                    {p.lowStockThreshold?? defaultLowStockThreshold ?? 5}
                   </td>
                 </tr>
               ))}
