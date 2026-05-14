@@ -16,8 +16,13 @@ datasource db {
 model Organization {
   id        String       @id @default(cuid())
   name      String
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+
+
+  defaultLowStockThreshold Int? @default(5)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   users     User[]
   products  Product[]
 }
