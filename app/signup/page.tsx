@@ -24,7 +24,7 @@ export default function SignupPage() {
     setLoading(false)
 
     if (!res.ok) return setError(data.error)
-    router.push('/login')
+    router.push('/dashboard')
   }
 
   return (
